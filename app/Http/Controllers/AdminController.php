@@ -36,22 +36,65 @@ class AdminController extends Controller
 
     public function add_product(Request $request)
     {
-       $product=new product;
-       $product->title=$request->product_title;
-       $product->description=$request->product_description;
-       $product->category=$request->product_category;
-       $product->quantity=$request->product_quantity;
-       $product->price=$request->product_price;
-       $product->discount_price=$request->product_discount;
-       
-       $image=$request->product_image;
-       $imagename=time().'.'.$image->getClientOriginalExtension();
+   $product=new product;
+   $product->title=$request->title;
+   $product->description=$request->description;
+   $product->category=$request->category;
+
+   $product->quantity=$request->quantity;
+
+   $product->price=$request->price;
+
+   $product->discount_price=$request->disc_price;
+   $image=$request->image;
+    $imagename=time().'.'.$image->getClientOriginalExtension();
+
+     $image->move('productimage',$imagename);
+  $product->image=$imagename;
+
+
+   $product->save();
+   return redirect()->back()->with('message',"Product added Successfully");
+
+
+
+    }
+
+    public function show_product()
+    {
+        $product=product::all();
+        return view('admin.show_product',compact('product'));
+    }
+    public function delete_product($id)
+    {
+        $product=product::find($id);
+        $product->delete();
+        return redirect()->back();
+    }
+    public function edit_product($id)
+    {
+        $product=product::find($id);
+
+        return view('admin.edit_product',compact('product'));
+    }
+    public function update_product(Request $request,$id)
+    {
+        $product=product::find($id);
+        $product->title=$request->title;
+        $product->description=$request->description;
+        $product->price=$request->price;
+        $product->discount_price=$request->disc_price;
+        $product->category=$request->category;
+        $product->quantity=$request->quantity;
+        $product->title=$request->title;
+        $image=$request->image;
+        $imagename=time().'.'.$image->getClientOriginalExtension();
+
        $image->move('productimage',$imagename);
        $product->image=$imagename;
        $product->save();
        return redirect()->back();
-
-
+      
 
     }
 }
