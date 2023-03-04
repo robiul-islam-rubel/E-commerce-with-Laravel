@@ -14,6 +14,19 @@
                            <a href="{{url('product_details',$pro->id)}}" class="option1">
                           Product Details
                            </a>
+                           <form action="{{url('add_cart',$pro->id)}}" method="POST">
+                              @csrf
+                              <div class="row">
+                                 <div class="col-md-4">
+                                 <input type="number" name="quantity" value="1" min="1">
+                                 </div>
+                                 <div class="col-md-4">
+                                 <input type="submit" value="Add to Cart">
+                                 </div>
+ 
+   
+                              </div>
+                           </form>
                            
                         </div>
                      </div>
