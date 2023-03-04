@@ -21,7 +21,8 @@ class HomeController extends Controller
         }
         else
         {
-            return view('home.userpage');
+            $product=Product::paginate(3);
+        return view('home.userpage',compact('product'));
         }
     }
 
@@ -66,13 +67,34 @@ class HomeController extends Controller
             return redirect()->back();
 
 
-
-
-
         }
         else
         {
             return redirect('login');
         }
+    }
+
+    public function show_cart()
+    {
+        if(Auth::id())
+        {
+            $id=Auth::user()->id;
+        $cart=cart::where('user_id','=',$id)->get();
+
+        return view('home.show_cart',compact('cart'));
+        }
+        else
+        {
+            return view('login');
+        }
+      
+    }
+
+    public function remove_cart($id)
+    {
+        $cart=cart::find($id);
+        $cart->delete();
+        return redirect()->back();
+
     }
 }
